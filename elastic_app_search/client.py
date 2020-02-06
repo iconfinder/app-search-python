@@ -289,6 +289,46 @@ class Client:
         endpoint = "engines/{}/click".format(engine_name)
         return self.session.request_ignore_response('post', endpoint, json=options)
 
+    def show_settings(self, engine_name):
+        """
+        Show all Weights and Boosts applied to the search fields of an Engine.
+        See https://swiftype.com/documentation/app-search/ for more details
+        on options and return values.
+
+        :param engine_name: Name of engine to search over.
+        """
+        endpoint = "engines/{}/search_settings".format(engine_name)
+        return self.session.request('get', endpoint)
+
+    def update_settings(self, engine_name, search_fields, result_fields, boosts):
+        """
+        Updates the settings for Search Field (Weights), Result Field, and Boosts.
+        See https://swiftype.com/documentation/app-search/ for more details
+        on options and return values.
+
+        :param engine_name: Name of engine to search over.
+        :param search_fields: Dict of Search Fields (weights)
+        :param result_fields: Dict of Result Fields
+        :param boosts: Dict of Boosts
+        """
+        endpoint = "engines/{}/search_settings".format(engine_name)
+        options = {
+            'search_fields': search_fields,
+            'result_fields': result_fields,
+            'boosts':        boosts
+        }
+        return self.session.request('put', endpoint, json = options)
+
+    def reset_settings(self, engine_name):
+        """
+        Reset your Engine to default values.
+        See https://swiftype.com/documentation/app-search/ for more details
+        on options and return values.
+
+        :param engine_name: Name of engine to search over.
+        """
+        endpoint = "engines/{}/search_settings/reset".format(engine_name)
+        return self.session.request('post', endpoint)
 
     @staticmethod
     def create_signed_search_key(api_key, api_key_name, options):
